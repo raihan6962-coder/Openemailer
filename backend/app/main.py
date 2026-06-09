@@ -10,23 +10,13 @@ from app.core.config import settings
 from app.core.logging import setup_logging
 from app.core.exceptions import AppException
 from app.api.v1 import auth, users, workspaces, mailboxes, leads, campaigns, templates, warmup, deliverability, inbox, crm, automation, analytics, billing, webhooks, admin
-from app.scheduler.scheduler import start_scheduler, stop_scheduler, setup_jobs
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     setup_logging()
     logger.info(f"Starting {settings.app_name} v{settings.app_version}")
-    try:
-        setup_jobs()
-        await start_scheduler()
-    except Exception as e:
-        logger.error(f"Scheduler setup failed (non-fatal): {e}")
     yield
-    try:
-        await stop_scheduler()
-    except Exception as e:
-        logger.error(f"Scheduler shutdown error: {e}")
     logger.info("Application shutdown complete")
 
 
