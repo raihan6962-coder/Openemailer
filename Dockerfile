@@ -25,7 +25,7 @@ RUN chmod +x /app/start.sh
 
 COPY --from=frontend-builder --chown=appuser:appuser /app/.next/standalone /app/frontend/
 COPY --from=frontend-builder --chown=appuser:appuser /app/.next/static /app/frontend/.next/static
-COPY --from=frontend-builder --chown=appuser:appuser /app/public /app/frontend/public
+RUN mkdir -p /app/frontend/public
 
 USER appuser
 
