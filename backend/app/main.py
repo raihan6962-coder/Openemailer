@@ -17,10 +17,16 @@ from app.scheduler.scheduler import start_scheduler, stop_scheduler, setup_jobs
 async def lifespan(app: FastAPI):
     setup_logging()
     logger.info(f"Starting {settings.app_name} v{settings.app_version}")
-    setup_jobs()
-    await start_scheduler()
+    try:
+        setup_jobs()
+        await start_scheduler()
+    except Exception as e:
+        logger.error(f"Scheduler setup failed (non-fatal): {e}")
     yield
-    await stop_scheduler()
+    try:
+        await stop_scheduler()
+    except Exception as e:
+        logger.error(f"Scheduler shutdown error: {e}")
     logger.info("Application shutdown complete")
 
 
