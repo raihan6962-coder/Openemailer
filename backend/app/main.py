@@ -1,7 +1,9 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from loguru import logger
 
 from app.core.config import settings
@@ -83,6 +85,11 @@ app.include_router(analytics.router, prefix="/api/v1")
 app.include_router(billing.router, prefix="/api/v1")
 app.include_router(webhooks.router, prefix="/api/v1")
 app.include_router(admin.router, prefix="/api/v1")
+
+
+frontend_dir = Path("/app/frontend")
+if frontend_dir.is_dir():
+    app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
 
 
 __all__ = ["app"]

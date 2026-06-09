@@ -23,15 +23,13 @@ COPY --chown=appuser:appuser backend/ /app/backend/
 COPY --chown=appuser:appuser start.sh /app/start.sh
 RUN chmod +x /app/start.sh
 
-COPY --from=frontend-builder --chown=appuser:appuser /app/.next/standalone /app/frontend/
-COPY --from=frontend-builder --chown=appuser:appuser /app/.next/static /app/frontend/.next/static
-RUN mkdir -p /app/frontend/public
+COPY --from=frontend-builder --chown=appuser:appuser /app/out/ /app/frontend/
 
 USER appuser
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:${PORT:-3000}/health || exit 1
+HEALTHCHECK --interval=10s --timeout=5s --start-period=15s --retries=3 \
+    CMD curl -f http://localhost:${PORT:-8000}/health || exit 1
 
-EXPOSE 3000
+EXPOSE 8000
 
 CMD ["bash", "/app/start.sh"]

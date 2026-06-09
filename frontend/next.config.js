@@ -1,15 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
+  output: "export",
+  trailingSlash: true,
   images: { unoptimized: true },
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
-  async rewrites() {
-    return [
-      { source: "/api/:path*", destination: "http://localhost:8000/api/:path*" },
-      { source: "/health", destination: "http://localhost:8000/health" },
-    ];
-  },
 };
 
 module.exports = nextConfig;
