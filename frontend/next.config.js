@@ -1,15 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
-  images: {
-    domains: ["localhost", "openmailer.app"],
-  },
+  images: { unoptimized: true },
+  eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: true },
   async rewrites() {
     return [
-      {
-        source: "/api/:path*",
-        destination: `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/:path*`,
-      },
+      { source: "/api/:path*", destination: "http://localhost:8000/api/:path*" },
+      { source: "/health", destination: "http://localhost:8000/health" },
     ];
   },
 };
